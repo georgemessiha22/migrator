@@ -1,5 +1,9 @@
 # Migrator
 
+<p align="center">
+  <a href="https://hub.docker.com/r/georgemessiha22/migrator"><img src="https://github.com/georgemessiha22/migrator/actions/workflows/docker-publish.yml/badge.svg" alt="Migrator CI Status" /></a>
+</p>
+
 Aiming to create a sidecar to create databases for services. **It only meant for local development**
 
 ## Usage
