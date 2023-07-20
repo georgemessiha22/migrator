@@ -1,4 +1,4 @@
-FROM python:latest as base
+FROM python:3.12.0b4-alpine3.18 as base
 
 LABEL maintainer="George Messiha <georgemessiha22@gmail.com>"
 
@@ -15,8 +15,8 @@ ENV POETRY_VIRTUALENVS_CREATE=false
 COPY ./dev/docker/entrypoint /usr/local/bin/entrypoint
 RUN chmod +x /usr/local/bin/entrypoint
 
-# install awesome poetry
-RUN curl -sSL https://install.python-poetry.org | python3 -
+# install awesome poetry & postgres driver
+RUN apk add poetry libpq postgresql-dev mysql-client
 
 FROM base as dev
 
