@@ -1,0 +1,23 @@
+version: '3.7'
+
+services:
+    migrator:
+        build:
+            context: .
+            dockerfile: ./dev/docker/Dockerfile
+            target: dev
+        image: migrator
+        environment: 
+            - DATABASE_USER=main
+            - DATABASE_PASSWORD=main
+            - DATABASE_NAME=main
+            - DATABASE_TYPE=postgresql
+            - DATABASE_DOMAIN=postgres
+            - DATABASE_PORT=5432
+        volumes:
+            - ./migrator:/app/migrator
+            - ./pyproject.toml:/app/pyproject.toml
+        command: python3 migrator/manage.py migrate
+        depends_on:
+            postgres:
+                condition: service_healthy

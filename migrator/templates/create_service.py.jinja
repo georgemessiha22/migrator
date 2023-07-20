@@ -1,0 +1,48 @@
+"""
+
+"""
+import logging
+
+from psycopg2.errors import DuplicateDatabase, DuplicateObject
+from yoyo import step
+
+logger = logging.getLogger("migrations-sidecar")
+
+__depends__ = {}
+
+__transactional__ = False
+
+name = "{{service_name}}"
+
+
+def apply_step(conn):
+    cursor = conn.cursor()
+
+    # CREATE DATABASE
+    try:
+        cursor.execute(f"CREATE DATABASE {name}")
+        logger.info(f"Created database '{name}'")
+    except DuplicateDatabase as e:
+        logger.warning(f"Database {name} already exist.")
+
+    # CREATE USER
+    try:
+        cursor.execute(f"CREATE USER {name} WITH ENCRYPTED PASSWORD '{name}'")
+        logger.info(f"Created user '{name}'")
+    except DuplicateObject:
+        logger.warning(f"User {name} already exist.")
+
+    # GRANT ACCESS
+    cursor.execute(f"GRANT ALL PRIVILEGES ON DATABASE {name} TO {name}")
+    logger.info(f"Access granted for user '{name}' to database '{name}'")
+
+
+def rollback_step(conn):
+    cursor = conn.cursor()
+    cursor.execute(f"DROP DATABASE [IF EXISTS] {name}")
+    cursor.execute(f"DROP USER [IF EXISTS] {name}")
+
+
+steps = [
+    step(apply_step, rollback_step)
+]

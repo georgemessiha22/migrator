@@ -1,0 +1,9 @@
+dev/
+!dev/docker/entrypoint
+.docker-cache/
+
+.env
+.gitignore
+docker-compose.yml
+
+poetry.lock

@@ -1,0 +1,14 @@
+# editors
+.idea/
+.vs-code/
+.vscode/
+.fleet/
+
+# docker
+.docker-cache/
+
+# python
+__pycache__/
+
+# repo specials
+migrator/migrations
