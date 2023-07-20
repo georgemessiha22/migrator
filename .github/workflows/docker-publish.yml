@@ -72,8 +72,8 @@ jobs:
         run: |
           git_hash=$(git rev-parse --short "${{ github.sha }}")
           version=$([[ -z "${{ github.head_ref }}" ]] && echo "${{ github.ref_name }}" || echo "${{ github.head_ref }}")
-          echo "version: $version-$git_hash"
-          version=$( [[ $version == "main" ]] && echo "latest" || echo $version-$git_hash )
+          version=$( [[ $version == "main" ]] && echo "main" || echo $version-$git_hash )
+          echo "version: $version"
           echo "version=$version" >> "$GITHUB_OUTPUT"
 
       # Build and push Docker image with Buildx (don't push on PR)
