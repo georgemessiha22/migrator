@@ -1,7 +1,7 @@
 #!/usr/bin/env make
 .PHONY: migrator-build
 
-include dev/makefiles/help.mk
+include dev/help.mk
 
 ### Migrator
 
