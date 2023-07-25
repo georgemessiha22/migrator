@@ -72,7 +72,7 @@ jobs:
         run: |
           git_hash=$(git rev-parse --short "${{ github.sha }}")
           version=$([[ -z "${{ github.head_ref }}" ]] && echo "${{ github.ref_name }}" || echo "${{ github.head_ref }}")
-          version=$( [[ $version == "main" ]] && echo "nightly" || echo $version-$git_hash,latest )
+          version=$( [[ $version == "main" ]] && echo $IMAGE_NAME:nightly || echo $IMAGE_NAME:$version-$git_hash,latest )
           echo "version: $version"
           echo "version=$version" >> "$GITHUB_OUTPUT"
 
