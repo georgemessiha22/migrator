@@ -15,6 +15,8 @@ logging.basicConfig(
     level=logging.getLevelNamesMapping()[LOGGING_LEVEL],
 )
 
+MIGRATION_FOLDER: str = os.environ.get("MIGRATION_FOLDER", "/migrations/")
+MIGRATION_TABLE: str = os.environ.get("MIGRATION_TABLE", "migrator")
 
 def database_url() -> str:
     """
@@ -46,7 +48,7 @@ def create(service_name: str) -> None:
     env = Environment(loader=FileSystemLoader("migrator/templates"))
     template = env.get_template("create_service.py.jinja")
     filename = str(datetime.date.today()).replace("-", "") + f"_{service_name}.py"
-    with open("migrator/migrations/" + filename, "w") as f:
+    with open(MIGRATION_FOLDER + filename, "w") as f:
         f.write(template.render(service_name=service_name))
     logger.info(f"Migration file (migrations/{filename}) craeted")
 
@@ -55,8 +57,8 @@ def create(service_name: str) -> None:
 def migrate():
     """Apply all migration files presented in the migration folder."""
     logger.info("Migrating")
-    backend = get_backend(database_url(), migration_table="migrator")
-    migrations = read_migrations("migrator/migrations")
+    backend = get_backend(database_url(), migration_table=MIGRATION_TABLE)
+    migrations = read_migrations(MIGRATION_FOLDER)
     with backend.lock():
         backend.apply_migrations(backend.to_apply(migrations))
 
